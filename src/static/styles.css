@@ -68,8 +68,7 @@ section h3 {
 /* Estilo para a lista de participantes */
 .activity-card ul {
   margin: 8px 0 0 0;
-  padding-left: 20px;
-  list-style-type: disc;
+  list-style-type: none;
 }
 
 .activity-card li {

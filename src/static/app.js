@@ -20,17 +20,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        // Lista de participantes formatada
-        let participantsHtml = "";
+        // Lista de participantes formatada (safe DOM manipulation)
+        let participantsContainer = document.createElement("div");
         if (details.participants.length > 0) {
-          participantsHtml = `
-            <p><strong>Participants:</strong></p>
-            <ul>
-              ${details.participants.map(email => `<li>${email}</li>`).join("")}
-            </ul>
-          `;
+          const participantsTitle = document.createElement("p");
+          participantsTitle.innerHTML = "<strong>Participants:</strong>";
+          participantsContainer.appendChild(participantsTitle);
+
+          const ul = document.createElement("ul");
+          details.participants.forEach(email => {
+            const li = document.createElement("li");
+            li.textContent = email;
+            ul.appendChild(li);
+          });
+          participantsContainer.appendChild(ul);
         } else {
-          participantsHtml = `<p><strong>Participants:</strong> None yet</p>`;
+          const noParticipants = document.createElement("p");
+          noParticipants.innerHTML = "<strong>Participants:</strong> None yet";
+          participantsContainer.appendChild(noParticipants);
         }
 
         activityCard.innerHTML = `
@@ -38,8 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          ${participantsHtml}
         `;
+
+        // Append participantsContainer after setting innerHTML
+        activityCard.appendChild(participantsContainer);
 
         activitiesList.appendChild(activityCard);
 
